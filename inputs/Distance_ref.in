@@ -1,0 +1,268 @@
+colvarsTrajFrequency 10
+colvarsRestartFrequency 1000
+
+colvar {
+      name apath_s_dist
+      outputTotalForce
+      lowerBoundary         0
+      upperBoundary         1.0
+      width                 0.01
+      subtractAppliedForce on
+      expandBoundaries on
+
+      extendedLagrangian    on
+      extendedFluctuation   0.05
+      extendedLangevinDamping 10.0
+
+      aspathCV {
+          weights {0.5 0.5 0.5 0.5}
+          distance {
+              name 001
+              group1 {atomNumbers {1}}
+              group2 {atomNumbers {14}}
+          }
+          distance {
+              name 002
+              group1 {atomNumbers {2}}
+              group2 {atomNumbers {14}}
+          }
+          distance {
+              name 003
+              group1 {atomNumbers {2}}
+              group2 {atomNumbers {3}}
+          }
+          distance {
+              name 004
+              group1 {atomNumbers {1}}
+              group2 {atomNumbers {3}}
+          }
+          pathFile ./path.txt
+      }
+}
+
+colvar {
+      name apath_z_dist
+
+      azpathCV {
+          weights {0.5 0.5 0.5 0.5}
+          distance {
+              name 001
+              group1 {atomNumbers {1}}
+              group2 {atomNumbers {14}}
+          }
+          distance {
+              name 002
+              group1 {atomNumbers {2}}
+              group2 {atomNumbers {14}}
+          }
+          distance {
+              name 003
+              group1 {atomNumbers {2}}
+              group2 {atomNumbers {3}}
+          }
+          distance {
+              name 004
+              group1 {atomNumbers {1}}
+              group2 {atomNumbers {3}}
+          }
+          pathFile ./path.txt
+      }
+}
+
+colvar {
+      name overall
+
+          distance {
+              name 001
+              group1 {atomNumbers {1}}
+              group2 {atomNumbers {14}}
+          }
+          distance {
+              name 002
+              group1 {atomNumbers {2}}
+              group2 {atomNumbers {14}}
+          }
+          distance {
+              name 003
+              group1 {atomNumbers {2}}
+              group2 {atomNumbers {3}}
+          }
+          distance {
+              name 004
+              group1 {atomNumbers {1}}
+              group2 {atomNumbers {3}}
+          }
+}
+
+colvar {
+      name dist_1-14
+
+      distance {
+          group1 {atomNumbers {1}}
+          group2 {atomNumbers {14}}
+      }
+}
+
+colvar {
+      name dist_2-14
+
+      distance {
+          group1 {atomNumbers {2}}
+          group2 {atomNumbers {14}}
+      }
+}
+
+colvar {
+      name dist_2-3
+
+      distance {
+          group1 {atomNumbers {2}}
+          group2 {atomNumbers {3}}
+      }
+}
+
+colvar {
+      name dist_1-3
+
+      distance {
+          group1 {atomNumbers {1}}
+          group2 {atomNumbers {3}}
+      }
+}
+
+#Harmonic restraints for hydrogens and bonds
+
+colvar {
+      name C_1-2
+
+      distance {
+          group1 {atomNumbers {1}}
+          group2 {atomNumbers {2}}
+      }
+}
+
+colvar {
+      name C_2-4
+
+      distance {
+          group1 {atomNumbers {2}}
+          group2 {atomNumbers {4}}
+      }
+}
+
+colvar {
+      name HO_12-14
+
+      distance {
+          group1 {atomNumbers {14}}
+          group2 {atomNumbers {12}}
+      }
+}
+
+colvar {
+      name HO_11-14
+
+      distance {
+          group1 {atomNumbers {11}}
+          group2 {atomNumbers {14}}
+      }
+}
+
+harmonicWalls {
+      colvars            apath_s_dist
+      lowerWalls         0
+      upperWalls         1.0
+      forceConstant      10.0
+      bypassExtendedLagrangian off
+}
+
+harmonicWalls {
+      colvars             apath_z_dist
+      lowerWalls         -0.025
+      upperWalls          0.025
+      forceConstant       0.01
+      outputenergy        on
+}
+
+harmonicWalls {
+      colvars            dist_1-3
+      lowerWalls         0
+      upperWalls         3.0
+      forceConstant      50.0
+      bypassExtendedLagrangian off
+}
+
+harmonicWalls {
+      colvars            dist_2-14
+      lowerWalls         0
+      upperWalls         3.5
+      forceConstant      50.0
+      bypassExtendedLagrangian off
+}
+
+harmonicWalls {
+      colvars            dist_2-3
+      lowerWalls         0
+      upperWalls         3.0
+      forceConstant      50.0
+      bypassExtendedLagrangian off
+}
+
+harmonicWalls {
+      colvars            dist_1-14
+      lowerWalls         0
+      upperWalls         3.5
+      forceConstant      50.0
+      bypassExtendedLagrangian off
+}
+
+harmonicWalls {
+      colvars            C_1-2
+      lowerWalls         1.45
+      upperWalls         1.55
+      forceConstant      250.0
+      bypassExtendedLagrangian off
+}
+
+harmonicWalls {
+      colvars            C_2-4
+      lowerWalls         1.45
+      upperWalls         1.55
+      forceConstant      250.0
+      bypassExtendedLagrangian off
+}
+
+harmonicWalls {
+      colvars            HO_11-14
+      lowerWalls         1.65
+      upperWalls         10.0
+      forceConstant      50.0
+      bypassExtendedLagrangian off
+}
+
+harmonicWalls {
+      colvars            HO_12-14
+      lowerWalls         1.65
+      upperWalls         10.0
+      forceConstant      50.0
+      bypassExtendedLagrangian off
+}
+
+abf {
+      colvars apath_s_dist
+      fullSamples 5000
+      writeCZARwindowFile yes
+      historyFreq 10000
+      shared on
+      sharedFreq 100
+      
+}
+
+metadynamics {
+     colvars apath_s_dist
+     hillWidth 2.0
+     hillWeight 0.2
+     wellTempered on
+     biasTemperature 8000
+     writeHillsTrajectory on
+}
