@@ -1,0 +1,9 @@
+[project]
+name = "clustering_quality"
+version = "0.1.0"
+authors = [{ name="Radu A. Talmazan", email="radu.talmazan@univ-lorraine.fr" }]
+dependencies = [
+    "numpy", "pandas", "scipy", "scikit-learn", "matplotlib", "kneed"
+]
+[tool.poetry.scripts]
+run = "cluster_quality.scripts.run:main"
